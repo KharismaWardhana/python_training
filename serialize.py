@@ -1,4 +1,6 @@
 import os
+import pickle
+from io import BytesIO
 
 new_dir = './Aris'
 if os.path.exists(new_dir) == False:
@@ -12,24 +14,27 @@ if os.path.exists(new_dir) == False:
 
 try:
     path_file = './abstrak.txt'
-    file_open = open(path_file, 'r')
+    file_open = open(path_file, 'rb')
 except:
     print('File not found!!!')
     exit()
 
 new_content = file_open.seek(80)
 new_content = file_open.read()
-print(new_content + '\n')
+print('File byte == ', new_content)
 file_open.close()
 
+encrypt = BytesIO()
+encrypt.write(new_content)
+
 try:
-    new_file = '/potongan_abstrak.txt'
+    new_file = '/potongan_abstrak.ser'
     path_newFile = new_dir + new_file
-    writer = open(path_newFile, 'w')
+    writer = open(path_newFile, 'wb')
 except:
     print('Something wrong happend')
     exit()
 
-line = writer.write(new_content)
-print('Successfully writing to new file')
+pickle.dump(encrypt, writer)
+print('\n Successfully writing to new file')
 writer.close()
